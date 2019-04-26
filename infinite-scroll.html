@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>infinite scroll</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+
+  <style>
+    .on {
+      width: 200px;
+      height: 500px;
+      border: 1px solid black;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='on' id='on'>
+    <div class='inner' id='inner'>
+    </div>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  var max = 20;
+  var loadMore = function () {
+    for (i = max -20; i < max; i++) {
+      $(".inner").append("<p class=" + i + " >test " + i + "</p>");
+      console.log(i)
+    }
+    max += 20;
+    console.log(document.getElementById('inner').clientHeight)
+    console.log(window.innerHeight, "innerHeight")
+    console.log(window.outerHeight, "outerHeight")
+  }
+  var hideExisting = function () {
+    for (j = max - 20; j > max - 40; j--) {
+      $("." + j).hide();
+    }
+    if (max > 20)
+      max -= 20;
+    console.log(document.getElementById('inner').clientHeight)
+    console.log(window.innerHeight)
+    console.log(window.outerHeight)
+  }
+  $('.on').scroll(function () {
+
+    var top = $('.on').scrollTop();
+
+    var totalHeight = document.getElementById('inner').clientHeight - $(".on").height()
+
+    if (top + window.outerHeight < document.getElementById('inner').clientHeight - $(".on").height()) {
+      hideExisting()
+    }
+
+    console.log('top: ', top, 'height', document.getElementById('inner').clientHeight - $(".on").height())
+    if (top >= document.getElementById('inner').clientHeight - $(".on").height()) {
+      loadMore();
+    }
+  });
+  $(".inner").css("border", "3px solid blue");
+  loadMore();
+</script>
+
+</html>
